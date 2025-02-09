@@ -1,0 +1,89 @@
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8" />
+    <!--link rel="icon" href="https://glitch.com/favicon.ico" /-->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Job Description</title>
+
+    <link rel="stylesheet" href="/style.css" />
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="content" role="main">
+
+        <!-- This is the start of content for our page -->
+        <h1 class="title">Job searching thingy</h2>
+
+        <div class="formDiv">
+
+          <p>
+            Enter your information in the form down below to make a cool little
+            card
+          </p>
+
+          <form method="post" enctype="multipart/form-data" action="/generate">
+            <label for="fullName">Full name</label>
+            <input
+              id="fullName"
+              name="fullName"
+              required="required"
+              placeholder="First and Last name"
+              type="text"
+            />
+
+            <label for="qualification">Qualification</label>
+            <input
+              id="qualification"
+              name="qualification"
+              required="required"
+              placeholder="Ex. Bachelor of something"
+              type="text"
+            />
+
+            <label for="jobTypes">Jobs you're looking for</label>
+            <input
+              id="jobTypes"
+              name="jobTypes"
+              required="required"
+              placeholder="Ex. Designing, Sales, etc"
+              type="text"
+            />
+
+            <label for="email">Your email</label>
+            <input
+              id="email"
+              name="email"
+              required="required"
+              placeholder="Ex. 8k1b1d1@example.com"
+              type="email"
+            />
+
+            <label for="phone">Your phone number</label>
+            <input
+              id="phone"
+              name="phone"
+              required="required"
+              placeholder="Ex. 123-456-7890"
+              type="tel"
+            />
+
+            <label for="picture">A nice picture of yourself</label>
+            <input id="picture" name="picture" type="file" accept="image/*" required="required" />
+
+            <label for="fontDropdown">Your preferred font</label>
+            <select id="fontDropdown" name="fontDropdown" required="required">
+              <option value="outfit">Sans-serif veriety</option>
+              <option value="Playfair">Serif variety</option>
+              <option value="papyrus">Avatar</option>
+              <option value="comicsans">Comic Sans</option>
+            </select>
+            <button type="submit">Make my thingamajig</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

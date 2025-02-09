@@ -1,0 +1,16 @@
+{
+  "name": "jobsearchtemplate",
+  "version": "1.0.0",
+  "description": "A project made to create templates",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abraham Daniel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "pdfkit": "^0.16.0"
+  }
+}
