@@ -67,6 +67,10 @@
     margin-top: 20px;
     text-align: center;
   }
+
+  .heart:hover, .heart:focus {
+    color: red;
+  }
   
   button,
   input, select {
