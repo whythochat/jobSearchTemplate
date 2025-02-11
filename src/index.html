@@ -8,15 +8,24 @@
     <title>Job Description</title>
 
     <link rel="stylesheet" href="/style.css" />
-
+    <style>
+      body.light-mode {
+        background-color: white;
+        color: black;
+      }
+      body.dark-mode {
+        background-color: black;
+        color: white;
+      }
+    </style>
   </head>
-  <body>
+  <body class="light-mode">
     <div class="wrapper">
       <div class="content" role="main">
 
         <!-- This is the start of content for our page -->
         <h1 class="title">Job searching thingy</h2>
-
+        <button id="toggleMode">Toggle Light/Dark Mode</button>
         <div class="formDiv">
 
           <p>
@@ -41,6 +50,14 @@
               required="required"
               placeholder="Ex. Bachelor of something"
               type="text"
+            />
+
+            <label for="experience">Experience</label>
+            <input
+              id="experience"
+              name="experience"
+              placeholder="Ex. 5 years of pro gaming"
+              type="text" 
             />
 
             <label for="jobTypes">Jobs you're looking for</label>
@@ -80,10 +97,29 @@
               <option value="papyrus">Avatar</option>
               <option value="comicsans">Comic Sans</option>
             </select>
+            <label for="fontColor">Font color</label>
+            <input id="fontColor" name="fontColor" type="color" value="#000000"/>
+            <label for="bgColor">Background color</label>
+            <input id="bgColor" name="bgColor" type="color" value="#ffffff" />
             <button type="submit">Make my thingamajig</button>
           </form>
         </div>
       </div>
     </div>
+    <script>
+      // JavaScript to toggle light/dark mode
+      document.getElementById('fontColor').addEventListener('change', function() {
+        document.getElementById('fontColor').style.backgroundColor = this.value;
+      });
+
+      document.getElementById('bgColor').addEventListener('change', function() {
+        document.getElementById('bgColor').style.backgroundColor = this.value;
+      });
+
+      document.getElementById('toggleMode').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+      });
+    </script>
   </body>
 </html>

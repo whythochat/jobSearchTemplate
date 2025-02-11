@@ -2,17 +2,10 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const app = express();
+const sharp = require('sharp');
 const PDFDocument = require('pdfkit');
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, 'pictures'))
-    },
-    filename: function (req, file, cb) {
-        var newFileName = Math.random().toString(36).substring(2, 10) + (path.extname(file.originalname)).toLowerCase();
-        cb(null, newFileName)
-    }
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({ storage: storage });
 
@@ -22,28 +15,41 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'src', 'index.html'));
 });
 
-app.post('/generate', upload.single('picture'), function (req, res) {
+app.post('/generate', upload.single('picture'), async function (req, res) {
 
-    param = {
+    let param = {
         'fullName': req.body.fullName,
         'qualification': req.body.qualification,
         'jobTypes': req.body.jobTypes,
+        'experience': req.body.experience,
         'email': req.body.email,
         'phone': req.body.phone,
         'font': req.body.fontDropdown,
+        'fontColor': req.body.fontColor,
+        'bgColor': req.body.bgColor
     }
 
-    const buffer = req.file.path;
+    picPath = `uploads/${req.file.filename}.jpg`;
+    const buffer = req.file.buffer;
+    const metadata = await sharp(buffer).metadata();
+    const uncimageWidth = metadata.width;
+    const uncimageHeight = metadata.height;
+    await sharp(buffer).resize(uncimageWidth / 2, uncimageHeight / 2).jpeg({ quality: 50 }).toFile(picPath);
 
     const pdf = new PDFDocument({margin: 10, size: [252, 144]});
-    pdf.pipe(res);
-
-    const imageWidth = 50; // Adjust as needed
-    const imageHeight = 100; // Adjust as needed
-    const imageX = pdf.page.width - imageWidth - 20; // Right side, 20px from the edge
+    if (param.bgColor)
+        {
+            pdf.rect(0, 0, pdf.page.width, pdf.page.height).fill();
+        }
+    if (param.fontColor) {
+        pdf.fillColor(param.fontColor);
+    }
+    const pdfImageWidth = 0.3 * pdf.page.width; // Adjust as needed
+    const pdfImageHeight = (uncimageHeight / uncimageWidth) * pdfImageWidth; // Maintain aspect ratio
+    const imageX = pdf.page.width - pdfImageWidth - 20; // Right side, 20px from the edge
     const imageY = 20; // Top, 20px from the top
 
-    pdf.image(buffer, imageX, imageY, { fit: [imageWidth, imageHeight] });
+    pdf.image(picPath, imageX, imageY, { fit: [pdfImageWidth, pdfImageHeight] });
 
     switch (param.font) {
         case 'outfit':
@@ -67,9 +73,14 @@ app.post('/generate', upload.single('picture'), function (req, res) {
     pdf.fontSize(16).text("Job request", { align: "left" });
     pdf.moveDown();
     pdf.fontSize(8).text(`Hi my name is ${param.fullName}`,{ align: "left", width: textWidth});
-    pdf.fontSize(8).text(`I have a qualification in ${param.qualification} so you know I'd be good at job(s) like ${param.jobTypes}.`,{ align: "left", width: textWidth });
-    pdf.fontSize(8).text(`My email is ${param.email} and my phone number is ${param.phone}.`,{ align: "left", width: textWidth });
-    pdf.end();
+    pdf.fontSize(8).text(`I have a qualification in ${param.qualification} so you know I'd be good at ${param.jobTypes}.`,{ align: "left", width: textWidth });
+    if (param.experience) {
+        pdf.fontSize(8).text(`I have ${param.experience} experience so I am a professional.`,{ align: "left", width: textWidth });
+    }
+    pdf.fontSize(8).text(`Feel free to contact me on my email(${param.email}) or my phone number(${param.phone}).`,{ align: "left", width: textWidth });
+    res.attachment('job_request.pdf');
+    pdf.pipe(res);
+    pdf.end();  
 });
 
 app.listen(3000, function () {
