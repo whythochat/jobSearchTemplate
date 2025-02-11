@@ -53,7 +53,7 @@ app.post('/generate', upload.single('picture'), async function (req, res) {
             pdf.font(path.join(__dirname, 'src', 'font', 'outfit.ttf'));
             break;
         case 'Playfair':
-            pdf.font(path.join(__dirname, 'src','font', 'Playfair.ttf'));
+            pdf.font(path.join(__dirname, 'src','font', 'playfair.ttf'));
             break;
         case 'papyrus':
             pdf.font(path.join(__dirname, 'src','font', 'papyrus.ttf'));
