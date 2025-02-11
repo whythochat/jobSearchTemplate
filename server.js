@@ -4,6 +4,7 @@ const multer = require('multer');
 const app = express();
 const sharp = require('sharp');
 const PDFDocument = require('pdfkit');
+const { timeLog } = require('console');
 
 const storage = multer.memoryStorage();
 
@@ -28,8 +29,8 @@ app.post('/generate', upload.single('picture'), async function (req, res) {
         'fontColor': req.body.fontColor,
         'bgColor': req.body.bgColor
     }
-
-    picPath = `uploads/${req.file.filename}.jpg`;
+    const picName = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const picPath = `uploads/${picName}.jpeg`
     const buffer = req.file.buffer;
     const metadata = await sharp(buffer).metadata();
     const uncimageWidth = metadata.width;
@@ -37,13 +38,9 @@ app.post('/generate', upload.single('picture'), async function (req, res) {
     await sharp(buffer).resize(uncimageWidth / 2, uncimageHeight / 2).jpeg({ quality: 50 }).toFile(picPath);
 
     const pdf = new PDFDocument({margin: 10, size: [252, 144]});
-    if (param.bgColor)
-        {
-            pdf.rect(0, 0, pdf.page.width, pdf.page.height).fill();
-        }
-    if (param.fontColor) {
-        pdf.fillColor(param.fontColor);
-    }
+
+    pdf.rect(0, 0, pdf.page.width, pdf.page.height).fill(param.bgColor);
+    pdf.fillColor(param.fontColor);
     const pdfImageWidth = 0.3 * pdf.page.width; // Adjust as needed
     const pdfImageHeight = (uncimageHeight / uncimageWidth) * pdfImageWidth; // Maintain aspect ratio
     const imageX = pdf.page.width - pdfImageWidth - 20; // Right side, 20px from the edge
