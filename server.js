@@ -4,7 +4,7 @@ const multer = require('multer');
 const app = express();
 const sharp = require('sharp');
 const PDFDocument = require('pdfkit');
-const { timeLog } = require('console');
+require('dotenv').config();
 
 const storage = multer.memoryStorage();
 
@@ -80,6 +80,8 @@ app.post('/generate', upload.single('picture'), async function (req, res) {
     pdf.end();  
 });
 
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+let port = process.env.PORT || 3000;
+
+app.listen(port, function () {
+    console.log(`Example app listening on port ${port}!`);
 })
