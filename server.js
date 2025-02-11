@@ -35,7 +35,7 @@ app.post('/generate', upload.single('picture'), async function (req, res) {
     const metadata = await sharp(buffer).metadata();
     const uncimageWidth = metadata.width;
     const uncimageHeight = metadata.height;
-    await sharp(buffer).resize(uncimageWidth / 2, uncimageHeight / 2).jpeg({ quality: 50 }).toFile(picPath);
+    await sharp(buffer).resize(Math.floor(uncimageWidth / 2), Math.floor(uncimageHeight / 2)).jpeg({ quality: 50 }).toFile(picPath);
 
     const pdf = new PDFDocument({margin: 10, size: [252, 144]});
 
