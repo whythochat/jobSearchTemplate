@@ -4,6 +4,15 @@
   [hidden] {
     display: none !important;
   }
+
+  @media (max-width: 600px) {
+    .title {
+      font-size: 2em;
+    }
+    button {
+      font-size: 1em;
+    }
+  }
   
   @font-face {
     font-family: outfit;
@@ -30,16 +39,11 @@
   }
 
   
-  p {
-    font-size: 1.25rem;
-  }
-  
   /* Title h1 style */
   .title {
     color: var(--color-text-header);
     font-style: normal;
     font-weight: bold;
-    font-size: 2rem;
     line-height: 105%;
     margin: 2rem 0 0;
   }
